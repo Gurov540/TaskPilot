@@ -1,0 +1,8 @@
+# Node
+node_modules/
+dist/
+
+# ОС/IDE
+.DS_Store
+.vscode/
+.env
