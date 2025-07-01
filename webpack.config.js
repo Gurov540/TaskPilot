@@ -7,7 +7,10 @@ module.exports = (env, argv) => {
   const isProduction = argv.mode === "production";
 
   return {
-    entry: "./src/js/main.js",
+    entry: {
+      main: "./src/js/main.js",
+      styles: "./src/style/main.css", // Явное подключение CSS
+    },
     output: {
       path: path.resolve(__dirname, "dist"),
       filename: isProduction ? "js/[name].[contenthash].js" : "js/[name].js",
@@ -21,6 +24,7 @@ module.exports = (env, argv) => {
       port: 9000,
       hot: true,
       open: true,
+      watchFiles: ["src/**/*"],
     },
     module: {
       rules: [
@@ -30,7 +34,6 @@ module.exports = (env, argv) => {
           use: [
             isProduction ? MiniCssExtractPlugin.loader : "style-loader",
             "css-loader",
-            "postcss-loader",
           ],
         },
         // Изображения
@@ -55,8 +58,7 @@ module.exports = (env, argv) => {
       // HTML обработка
       new HtmlWebpackPlugin({
         template: "./src/index.html",
-        filename: "index.html",
-        minify: isProduction,
+        chunks: ["main", "style"],
       }),
 
       // CSS извлечение
@@ -83,5 +85,14 @@ module.exports = (env, argv) => {
       },
     },
     devtool: isProduction ? false : "source-map",
+    stats: {
+      errorDetails: true, // Показывать детали ошибок
+      logging: "verbose", // Детальное логирование
+    },
+    ignoreWarnings: [
+      {
+        module: /\.css$/, // Игнорировать предупреждения по CSS
+      },
+    ],
   };
 };
