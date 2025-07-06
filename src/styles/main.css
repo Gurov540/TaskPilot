@@ -1,0 +1,7 @@
+@import url(./components/sidebar-menu.css);
+
+body {
+  width: 100px;
+  height: 100px;
+  background-color: #2b2b2b;
+}
