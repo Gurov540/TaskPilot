@@ -8,8 +8,7 @@ module.exports = (env, argv) => {
 
   return {
     entry: {
-      main: "./src/js/main.js",
-      styles: "./src/style/main.css", // Явное подключение CSS
+      main: "./src/js/main.js", // Здесь импортируем CSS!
     },
     output: {
       path: path.resolve(__dirname, "dist"),
@@ -55,20 +54,15 @@ module.exports = (env, argv) => {
       ],
     },
     plugins: [
-      // HTML обработка
       new HtmlWebpackPlugin({
         template: "./src/index.html",
-        chunks: ["main", "style"],
+        chunks: ["main"], // Подключаем только основной чанк
       }),
-
-      // CSS извлечение
       new MiniCssExtractPlugin({
         filename: isProduction
           ? "css/[name].[contenthash].css"
           : "css/[name].css",
       }),
-
-      // Копирование статических файлов
       new CopyPlugin({
         patterns: [
           {
@@ -85,14 +79,5 @@ module.exports = (env, argv) => {
       },
     },
     devtool: isProduction ? false : "source-map",
-    stats: {
-      errorDetails: true, // Показывать детали ошибок
-      logging: "verbose", // Детальное логирование
-    },
-    ignoreWarnings: [
-      {
-        module: /\.css$/, // Игнорировать предупреждения по CSS
-      },
-    ],
   };
 };
